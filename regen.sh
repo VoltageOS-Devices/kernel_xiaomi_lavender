@@ -1,0 +1,1 @@
+export ARCH=arm64 && export SUBARCH=arm64 && make lavender_defconfig && mv .config arch/arm64/configs/lavender_defconfig && git add arch/arm64/configs/lavender_defconfig && git commit -m "defconfig: Regen" -s
