@@ -822,6 +822,10 @@ int32_t msm_sensor_driver_probe(void *setting,
 			slave_info32->output_format;
 		slave_info->bypass_video_node_creation =
 			!!slave_info32->bypass_video_node_creation;
+#ifdef CONFIG_MACH_XIAOMI_LAVENDER
+		slave_info->vendor_id_info = slave_info32->vendor_id_info;
+		slave_info->vcm_id_info = slave_info32->vcm_id_info;
+#endif
 		kfree(slave_info32);
 	} else
 #endif
@@ -904,6 +908,11 @@ int32_t msm_sensor_driver_probe(void *setting,
 		if (slave_info->sensor_id_info.sensor_id ==
 			s_ctrl->sensordata->cam_slave_info->
 				sensor_id_info.sensor_id &&
+#ifdef CONFIG_MACH_XIAOMI_LAVENDER
+			slave_info->vendor_id_info.vendor_id ==
+				s_ctrl->sensordata->cam_slave_info->
+					vendor_id_info.vendor_id &&
+#endif
 			!(strcmp(slave_info->sensor_name,
 			s_ctrl->sensordata->cam_slave_info->sensor_name))) {
 			pr_err("slot%d: sensor name: %s sensor id%d already probed\n",
@@ -947,6 +956,11 @@ int32_t msm_sensor_driver_probe(void *setting,
 		slave_info->sensor_id_info.sensor_id_reg_addr;
 	camera_info->sensor_id = slave_info->sensor_id_info.sensor_id;
 	camera_info->sensor_id_mask = slave_info->sensor_id_info.sensor_id_mask;
+
+#ifdef CONFIG_MACH_XIAOMI_LAVENDER
+	s_ctrl->sensordata->vendor_id_info = &slave_info->vendor_id_info;
+	s_ctrl->sensordata->vcm_id_info = &slave_info->vcm_id_info;
+#endif
 
 	/* Fill CCI master, slave address and CCI default params */
 	if (!s_ctrl->sensor_i2c_client) {
